@@ -1,5 +1,9 @@
+mod interpreter;
+
 use std::{env, cmp::Ordering};
 use colored::Colorize;
+
+use crate::interpreter::Interpreter;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -19,10 +23,14 @@ fn main() {
 
     // The first argument is the name of the program
     let program_name = &args[0];
+    println!("Program name: {}", program_name);
 
     // The second argument is the parameter
-    let parameters = String::from(&args[1]);
+    let parameter = String::from(&args[1]);
 
-    println!("Program name: {}", program_name);
-    println!("Parameters: {:?}", parameters);
+    let interpreter = Interpreter::new();
+    match interpreter.interpret(parameter) {
+        Ok(result) => println!("Ok {}", result),
+        Err(error) => println!("Error {}", error)
+    };
 }
