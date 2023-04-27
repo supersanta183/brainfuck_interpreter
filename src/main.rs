@@ -5,6 +5,9 @@ use colored::Colorize;
 
 use crate::interpreter::Interpreter;
 
+// Call with: cargo run -- <parameters>
+//parameters is the brainfuck code to be interpreted.
+
 fn main() {
     let args: Vec<String> = env::args().collect();
 
@@ -28,9 +31,13 @@ fn main() {
     // The second argument is the parameter
     let parameter = String::from(&args[1]);
 
+    /* 
     let interpreter = Interpreter::new();
     match interpreter.interpret(parameter) {
         Ok(result) => println!("Ok {}", result),
         Err(error) => println!("Error {}", error)
     };
+    */
+
+    println!("Parameter: {}", parameter);
 }
