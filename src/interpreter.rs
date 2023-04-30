@@ -1,7 +1,4 @@
-use ascii_converter::*;
-
 use crate::ascii_convert::AsciiConverter;
-use std::thread;
 
 pub struct BrainfuckInterpreter {
     byte_array: [u8; 30000],
@@ -20,8 +17,6 @@ impl BrainfuckInterpreter {
     pub fn get_byte_array(&self) -> [u8; 30000] {
         self.byte_array
     }
-
-    //+[-->-[>>+>-----<<]<--<---]>-.>>>+.>>..+++[.>]<<<<.+++.------.<<-.>>>>+. gives wrong output
 
     //function that interprets a string and returns a result. OK if the string is valid brainfuck and Err otherwise.
     pub fn interpret(&mut self, source: &String) -> Result<String, String> {
@@ -53,15 +48,7 @@ impl BrainfuckInterpreter {
                 },
                 '[' => {
                     if self.byte_array[self.byte_array_position] == 0 {
-                        let mut loop_level = 1;
-                        while loop_level > 0 {
-                            i += 1;
-                            match source.chars().nth(i).unwrap() {
-                                '[' => loop_level += 1,
-                                ']' => loop_level -= 1,
-                                _ => (),
-                            }
-                        }
+                        i = skip_to_end_of_loop(source, i);
                     } else {
                         loop_array.push(i);
                     }
@@ -78,13 +65,25 @@ impl BrainfuckInterpreter {
                 _ => (),
             }
             i += 1;
-            //thread::sleep_ms(1000);
-
         }
         //convert output array to ascii string with the ascii converter crate
         let result = AsciiConverter::convert(&output_array);
         Ok(result)
     }
+}
+
+fn skip_to_end_of_loop(source: &String, i: usize) -> usize {
+    let mut loop_level = 1;
+    let mut j = i;
+    while loop_level > 0 {
+        j += 1;
+        match source.chars().nth(j).unwrap() {
+            '[' => loop_level += 1,
+            ']' => loop_level -= 1,
+            _ => (),
+        }
+    }
+    j
 }
 
 #[cfg(test)]
@@ -188,8 +187,14 @@ mod tests {
     }
 
     #[test]
-    fn xd() {
+    fn should_print_hello_world() {
         let mut interpreter = BrainfuckInterpreter::new();
         assert_eq!(interpreter.interpret(&String::from("++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.")).unwrap(), "Hello World!\n");
+    }
+
+    #[test]
+    fn should_also_print_hello_world() {
+        let mut interpreter = BrainfuckInterpreter::new();
+        assert_eq!(interpreter.interpret(&String::from("+[-->-[>>+>-----<<]<--<---]>-.>>>+.>>..+++[.>]<<<<.+++.------.<<-.>>>>+.")).unwrap(), "Hello, World!");
     }
 }
