@@ -1,9 +1,10 @@
-mod interpreter;
+pub mod interpreter;
+pub mod ascii_convert;
 
 use std::{env, cmp::Ordering};
 use colored::Colorize;
 
-use crate::interpreter::Interpreter;
+use crate::interpreter::BrainfuckInterpreter;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -28,9 +29,9 @@ fn main() {
     // The second argument is the parameter
     let parameter = String::from(&args[1]);
 
-    let interpreter = Interpreter::new();
+    let mut interpreter = BrainfuckInterpreter::new();
     match interpreter.interpret(parameter) {
-        Ok(result) => println!("Ok {}", result),
+        Ok(result) => println!("Output: {}", result),
         Err(error) => println!("Error {}", error)
     };
 }
