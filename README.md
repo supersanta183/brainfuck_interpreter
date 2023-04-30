@@ -11,3 +11,4 @@ Cargo run -- "++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..
 Output: "Hello world!"
 ```
 
+the , operator has not been implemented, so it will just be ignored if present in the provided string.
