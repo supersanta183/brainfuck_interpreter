@@ -24,7 +24,7 @@ impl BrainfuckInterpreter {
     //+[-->-[>>+>-----<<]<--<---]>-.>>>+.>>..+++[.>]<<<<.+++.------.<<-.>>>>+. gives wrong output
 
     //function that interprets a string and returns a result. OK if the string is valid brainfuck and Err otherwise.
-    pub fn interpret(&mut self, source: String) -> Result<String, String> {
+    pub fn interpret(&mut self, source: &String) -> Result<String, String> {
         let mut output_array: Vec<u8> = Vec::new();
         let mut loop_array: Vec<usize> = Vec::new();
         let mut i = 0;
@@ -61,7 +61,6 @@ impl BrainfuckInterpreter {
                 _ => (),
             }
             i += 1;
-            //thread::sleep_ms(1000);
         }
 
         //convert output array to ascii string with the ascii converter crate
@@ -76,7 +75,7 @@ mod tests {
     #[test]
     fn first_position_should_be_1() {
         let mut interpreter = BrainfuckInterpreter::new();
-        interpreter.interpret(String::from("+")).unwrap();
+        interpreter.interpret(&String::from("+")).unwrap();
 
         assert_eq!(interpreter.get_byte_array()[0], 1);
     }
@@ -84,7 +83,7 @@ mod tests {
     #[test]
     fn first_position_should_be_2() {
         let mut interpreter = BrainfuckInterpreter::new();
-        interpreter.interpret(String::from("++")).unwrap();
+        interpreter.interpret(&String::from("++")).unwrap();
 
         assert_eq!(interpreter.get_byte_array()[0], 2);
     }
@@ -92,7 +91,7 @@ mod tests {
     #[test]
     fn second_position_should_be_1() {
         let mut interpreter = BrainfuckInterpreter::new();
-        interpreter.interpret(String::from(">+")).unwrap();
+        interpreter.interpret(&String::from(">+")).unwrap();
 
         assert_eq!(interpreter.get_byte_array()[1], 1);
     }
@@ -100,7 +99,7 @@ mod tests {
     #[test]
     fn first_position_should_be_1_after_moving_back_and_forth() {
         let mut interpreter = BrainfuckInterpreter::new();
-        interpreter.interpret(String::from("><+")).unwrap();
+        interpreter.interpret(&String::from("><+")).unwrap();
 
         assert_eq!(interpreter.get_byte_array()[0], 1);
     }
@@ -108,7 +107,7 @@ mod tests {
     #[test]
     fn first_position_should_be_0_after_minus() {
         let mut interpreter = BrainfuckInterpreter::new();
-        interpreter.interpret(String::from("+-")).unwrap();
+        interpreter.interpret(&String::from("+-")).unwrap();
 
         assert_eq!(interpreter.get_byte_array()[0], 0);
     }
@@ -116,7 +115,7 @@ mod tests {
     #[test]
     fn second_position_should_be_2_after_looping() {
         let mut interpreter = BrainfuckInterpreter::new();
-        interpreter.interpret(String::from("++[>+<-]")).unwrap();
+        interpreter.interpret(&String::from("++[>+<-]")).unwrap();
 
         assert_eq!(interpreter.get_byte_array()[1], 2);
     }
@@ -124,7 +123,7 @@ mod tests {
     #[test]
     fn third_position_should_be_1_after_looping_and_moving() {
         let mut interpreter = BrainfuckInterpreter::new();
-        interpreter.interpret(String::from("++[>+<-]>>+")).unwrap();
+        interpreter.interpret(&String::from("++[>+<-]>>+")).unwrap();
 
         assert_eq!(interpreter.get_byte_array()[0], 0);
         assert_eq!(interpreter.get_byte_array()[1], 2);
@@ -135,7 +134,7 @@ mod tests {
     fn second_position_should_be_4_with_nested_loops() {
         let mut interpreter = BrainfuckInterpreter::new();
         interpreter
-            .interpret(String::from("+[>++[>+<-]<-]"))
+            .interpret(&String::from("+[>++[>+<-]<-]"))
             .unwrap();
 
         assert_eq!(interpreter.get_byte_array()[0], 0);
@@ -147,7 +146,7 @@ mod tests {
     fn test() {
         let mut interpreter = BrainfuckInterpreter::new();
         interpreter
-            .interpret(String::from("+[>++[>+[>+<-]<-]<-]"))
+            .interpret(&String::from("+[>++[>+[>+<-]<-]<-]"))
             .unwrap();
 
         for i in 0..4 {
@@ -162,7 +161,7 @@ mod tests {
         let mut interpreter = BrainfuckInterpreter::new();
         assert_eq!(
             interpreter
-                .interpret(String::from(
+                .interpret(&String::from(
                     "++++++++++++++++++++++++++++++++++++++++++++++++."
                 ))
                 .unwrap(),
@@ -173,6 +172,6 @@ mod tests {
     #[test]
     fn xd() {
         let mut interpreter = BrainfuckInterpreter::new();
-        assert_eq!(interpreter.interpret(String::from("++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.")).unwrap(), "Hello World!\n");
+        assert_eq!(interpreter.interpret(&String::from("++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.")).unwrap(), "Hello World!\n");
     }
 }
