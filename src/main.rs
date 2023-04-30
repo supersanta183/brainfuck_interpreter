@@ -6,6 +6,9 @@ use colored::Colorize;
 
 use crate::interpreter::BrainfuckInterpreter;
 
+// Call with: cargo run -- <parameters>
+//parameters is the brainfuck code to be interpreted.
+
 fn main() {
     let args: Vec<String> = env::args().collect();
 
@@ -30,8 +33,10 @@ fn main() {
     let parameter = String::from(&args[1]);
 
     let mut interpreter = BrainfuckInterpreter::new();
-    match interpreter.interpret(parameter) {
+    match interpreter.interpret(&parameter) {
         Ok(result) => println!("Output: {}", result),
         Err(error) => println!("Error {}", error)
     };
+
+    println!("Parameter: {}", parameter);
 }
