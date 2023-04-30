@@ -31,6 +31,7 @@ fn main() {
 
     // The second argument is the parameter
     let parameter = String::from(&args[1]);
+    println!("Input: {}", parameter);
 
     let mut interpreter = BrainfuckInterpreter::new();
     match interpreter.interpret(&parameter) {
@@ -38,5 +39,4 @@ fn main() {
         Err(error) => println!("Error {}", error)
     };
 
-    println!("Parameter: {}", parameter);
 }

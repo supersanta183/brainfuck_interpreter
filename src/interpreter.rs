@@ -45,14 +45,31 @@ impl BrainfuckInterpreter {
                         self.byte_array[self.byte_array_position] -= 1
                     }
                 }
-                '>' => self.byte_array_position += 1,
-                '<' => self.byte_array_position -= 1,
+                '>' => {
+                    self.byte_array_position = (self.byte_array_position + 1) % 30000;
+                },
+                '<' => {
+                    self.byte_array_position = (self.byte_array_position + 29999) % 30000;
+                },
                 '[' => {
-                    loop_array.push(i);
+                    if self.byte_array[self.byte_array_position] == 0 {
+                        let mut loop_level = 1;
+                        while loop_level > 0 {
+                            i += 1;
+                            match source.chars().nth(i).unwrap() {
+                                '[' => loop_level += 1,
+                                ']' => loop_level -= 1,
+                                _ => (),
+                            }
+                        }
+                    } else {
+                        loop_array.push(i);
+                    }
                 }
                 ']' => {
                     if self.byte_array[self.byte_array_position] > 0 {
                         i = loop_array.pop().unwrap();
+
                         continue;
                     }
                     loop_array.pop();
@@ -61,8 +78,9 @@ impl BrainfuckInterpreter {
                 _ => (),
             }
             i += 1;
-        }
+            //thread::sleep_ms(1000);
 
+        }
         //convert output array to ascii string with the ascii converter crate
         let result = AsciiConverter::convert(&output_array);
         Ok(result)
